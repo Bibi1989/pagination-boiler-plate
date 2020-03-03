@@ -32,7 +32,7 @@ function App() {
   const currentPosts = posts.slice(firstIndex, lastIndex);
 
   const pageNumber = [];
-  for (let i = 0; i < Math.ceil(posts.length / page); i++) {
+  for (let i = 0; i < Math.ceil(posts.length / pagePerPost); i++) {
     pageNumber.push(i);
   }
   return (
