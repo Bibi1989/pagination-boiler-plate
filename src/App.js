@@ -5,7 +5,7 @@ function App() {
   // https://jsonplaceholder.typicode.com/posts
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [page, setPage] = useState(10);
+  const [pagePerPost] = useState(10);
   const [loading, setLoading] = useState(false);
 
   const getPosts = async () => {
@@ -27,15 +27,14 @@ function App() {
     console.log(num);
   };
 
-  const lastIndex = currentPage * page;
-  const firstIndex = lastIndex - page;
+  const lastIndex = currentPage * pagePerPost;
+  const firstIndex = lastIndex - pagePerPost;
   const currentPosts = posts.slice(firstIndex, lastIndex);
 
   const pageNumber = [];
   for (let i = 0; i < Math.ceil(posts.length / page); i++) {
     pageNumber.push(i);
   }
-  console.log(pageNumber);
   return (
     <div>
       {currentPosts.map(post => (
