@@ -1,24 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  // https://jsonplaceholder.typicode.com/posts
+  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(10);
+  const [loading, setLoading] = useState(false);
+
+  const getPosts = async () => {
+    setLoading(true);
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
+    setPosts(response.data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+  if (loading) return <p>Loading</p>;
+
+  const handlePaginate = num => {
+    setCurrentPage(num);
+    console.log(num);
+  };
+
+  const lastIndex = currentPage * page;
+  const firstIndex = lastIndex - page;
+  const currentPosts = posts.slice(firstIndex, lastIndex);
+
+  const pageNumber = [];
+  for (let i = 0; i < Math.ceil(posts.length / page); i++) {
+    pageNumber.push(i);
+  }
+  console.log(pageNumber);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div>
+      {currentPosts.map(post => (
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          <span>Title: </span> {post.title}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      ))}
+      {pageNumber.map(p => (
+        <span
+          onClick={() => handlePaginate(p + 1)}
+          style={{ border: "1px solid #888", padding: "10px", margin: "0 5px" }}
         >
-          Learn React
-        </a>
-      </header>
+          {p + 1}
+        </span>
+      ))}
     </div>
   );
 }
